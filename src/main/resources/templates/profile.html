@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: header-css}"></head>
+<body>
+<div th:replace="~{fragments :: navbar}"></div>
+<div class="container">
+    <div class="text-center mb-5">
+        <div class="bg-light d-inline-block p-4 rounded-circle mb-3 border">👤</div>
+        <h3>Мій профіль</h3>
+        <p class="text-muted">📧 petrenko@gmail.com | 📞 +380 67 123 4567</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <h5 class="border-bottom pb-2">Мої загублені речі</h5>
+            <div class="row g-2 mt-2">
+                <div class="col-4"><img src="https://via.placeholder.com/150" class="img-fluid rounded shadow-sm"></div>
+                <div class="col-4"><img src="https://via.placeholder.com/150" class="img-fluid rounded shadow-sm"></div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <h5 class="border-bottom pb-2">Мої знайдені речі</h5>
+            <div class="row g-2 mt-2">
+                <div class="col-4"><img src="https://via.placeholder.com/150" class="img-fluid rounded shadow-sm"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: header-css}"></head>
+<body class="bg-light">
+<div th:replace="~{fragments :: navbar}"></div>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4 me-4 border bg-white p-4 shadow-sm rounded">
+            <div class="nav nav-tabs mb-4">
+                <button class="nav-link active text-dark">Вхід</button>
+                <button class="nav-link text-muted">Реєстрація</button>
+            </div>
+            <form>
+                <div class="mb-3">
+                    <label class="small fw-bold">Email</label>
+                    <input type="email" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="small fw-bold">Пароль</label>
+                    <input type="password" class="form-control">
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="rem">
+                    <label class="form-check-label small" for="rem">Запам'ятати мене</label>
+                </div>
+                <button class="btn btn-custom w-100">Увійти</button>
+            </form>
+        </div>
+
+        <div class="col-md-4 border bg-white p-4 shadow-sm rounded">
+            <h5 class="mb-4">Загублені речі</h5>
+            <div class="mb-3">
+                <label class="small fw-bold">Ключі від авто</label>
+                <input type="text" class="form-control mb-2" placeholder="...">
+                <label class="small fw-bold">Смартфон Samsung</label>
+                <input type="text" class="form-control mb-3" placeholder="...">
+            </div>
+            <button class="btn btn-custom w-100 mb-2">Створити акаунт</button>
+            <div class="d-flex gap-2 mt-3">
+                <button class="btn btn-outline-success w-50 small">Увійти</button>
+                <button class="btn btn-success w-50 small">Зареєструватися</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

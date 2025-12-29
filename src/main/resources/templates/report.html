@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: header-css}"></head>
+<body>
+<div th:replace="~{fragments :: navbar}"></div>
+<div class="container" style="max-width: 600px;">
+    <div class="card shadow-sm border-0 p-4">
+        <h3 class="mb-4 text-center">Я знайшов річ</h3>
+        <form>
+            <div class="mb-3">
+                <label class="form-label small fw-bold">Ваше ім'я:</label>
+                <input type="text" class="form-control border-secondary-subtle">
+            </div>
+            <div class="mb-3">
+                <label class="form-label small fw-bold">Ваш телефон:</label>
+                <input type="tel" class="form-control border-secondary-subtle">
+            </div>
+            <div class="mb-3">
+                <label class="form-label small fw-bold">Адреса де знайдено річ:</label>
+                <input type="text" class="form-control border-secondary-subtle">
+            </div>
+            <div class="mb-3">
+                <button type="button" class="btn btn-light w-100 border text-muted">📁 Завантажити фото</button>
+            </div>
+            <div class="mb-3">
+                <label class="form-label small fw-bold">Опис:</label>
+                <textarea class="form-control border-secondary-subtle" rows="4"></textarea>
+            </div>
+            <button type="submit" class="btn btn-custom w-100 py-2">Надіслати</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

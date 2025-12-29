@@ -1,11 +1,35 @@
 <!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <title>Lost and Found</title>
-</head>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: header-css}"></head>
 <body>
-<h1>Lost and Found працює!</h1>
-<p>Spring Boot успішно запущений.</p>
+<div th:replace="~{fragments :: navbar}"></div>
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Загублені речі</h2>
+        <span class="text-muted">Показано: 8 з 224</span>
+    </div>
+
+    <div class="list-group shadow-sm">
+        <div class="list-group-item d-flex align-items-center justify-content-between p-3 border-start-0 border-end-0">
+            <div class="d-flex align-items-center">
+                <img src="https://via.placeholder.com/100" class="card-img-left me-3" alt="item">
+                <div>
+                    <h5 class="mb-1">Чорний рюкзак</h5>
+                    <p class="mb-0 text-muted small">Залізничн., о. Золочівська, Київ | 20 березня, 2020</p>
+                </div>
+            </div>
+            <a href="/item/1" class="btn btn-custom px-4">Переглянути</a>
+        </div>
+    </div>
+
+    <nav class="mt-4">
+        <ul class="pagination pagination-sm justify-content-center">
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">Наступна ></a></li>
+        </ul>
+    </nav>
+</div>
 </body>
 </html>
