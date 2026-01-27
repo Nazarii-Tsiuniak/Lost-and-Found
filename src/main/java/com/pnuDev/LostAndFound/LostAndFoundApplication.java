@@ -1,4 +1,4 @@
-package com.example.Lost.and.Found;
+package com.pnuDev.LostAndFound;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

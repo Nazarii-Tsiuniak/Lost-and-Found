@@ -1,4 +1,4 @@
-package com.example.Lost.and.Found;
+package com.pnuDev.LostAndFound;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.example.Lost.and.Found;
+package com.pnuDev.LostAndFound;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
