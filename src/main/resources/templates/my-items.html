@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: header-css}"></head>
+<body>
+
+<div th:replace="~{fragments :: navbar}"></div>
+
+<div class="container">
+    <h3 class="mb-4">Мої оголошення</h3>
+
+    <ul class="nav nav-tabs mb-3">
+        <li class="nav-item">
+            <a class="nav-link active" href="#">Загублені</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Знайдені</a>
+        </li>
+    </ul>
+
+    <div class="list-group shadow-sm">
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="mb-1">Чорний рюкзак</h6>
+                <small class="text-muted">Київ · 20.03.2020</small>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-outline-secondary">Редагувати</button>
+                <button class="btn btn-sm btn-outline-danger">Видалити</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

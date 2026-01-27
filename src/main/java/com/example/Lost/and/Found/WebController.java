@@ -1,44 +1,51 @@
 package com.example.Lost.and.Found;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class WebController {
 
     // Головна сторінка
     @GetMapping("/")
-    public String index(Authentication auth) {
-        if (auth == null || !auth.isAuthenticated()) {
-            // якщо користувач не залогінений → показуємо auth.html
-            return "auth";
-        }
-        return "index"; // залогінений → index.html
+    public String index() {
+        return "index";
     }
 
-    @GetMapping("/item/1")
-    public String itemDetail() {
+    // Деталі речі
+    @GetMapping("/item/{id}")
+    public String itemDetail(@PathVariable Long id) {
         return "item-detail";
     }
 
-    @GetMapping("/report")
-    public String reportFound() {
-        return "report";
-    }
-
-    @GetMapping("/profile")
-    public String profile() {
-        return "profile";
-    }
-
+    // Вхід / реєстрація
     @GetMapping("/login")
     public String login() {
         return "auth";
     }
 
+    // Профіль
+    @GetMapping("/profile")
+    public String profile() {
+        return "profile";
+    }
+
+    // Мої оголошення
     @GetMapping("/my-items")
     public String myItems() {
-        return "profile";
+        return "my-items";
+    }
+
+    // Я знайшов річ
+    @GetMapping("/report/found")
+    public String reportFound() {
+        return "report-found";
+    }
+
+    // Я загубив річ
+    @GetMapping("/report/lost")
+    public String reportLost() {
+        return "report-lost";
     }
 }
