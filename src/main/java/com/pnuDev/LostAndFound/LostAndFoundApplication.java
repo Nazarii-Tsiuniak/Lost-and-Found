@@ -9,5 +9,4 @@ public class LostAndFoundApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(LostAndFoundApplication.class, args);
 	}
-
 }
