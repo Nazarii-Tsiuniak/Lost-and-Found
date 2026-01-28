@@ -1,68 +1,145 @@
 <!DOCTYPE html>
-<html lang="uk" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments :: header-css}"></head>
-<body class="bg-light">
+<html xmlns:th="http://www.thymeleaf.org" lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Вхід та Реєстрація - Lost & Found</title>
+    <th:block th:replace="~{fragments :: header-css}"></th:block>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body.auth-page {
+            background-color: #f8f9fa;
+        }
+
+        .auth-wrapper {
+            min-height: calc(100vh - 100px); /* Висота екрана мінус висота навбара */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            width: 100%; /* Додаємо для правильної поведінки в flex */
+        }
+
+        .auth-header {
+            background-color: var(--main-green);
+            padding: 30px 20px 0 20px;
+        }
+
+        .auth-header h4 {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            color: rgba(255,255,255,0.7) !important;
+            padding: 12px 25px;
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: white !important;
+            color: var(--main-green) !important;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .btn-custom {
+            padding: 12px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="auth-page">
 
 <div th:replace="~{fragments :: navbar}"></div>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6 border bg-white p-4 shadow-sm rounded">
-            <!-- Вкладки -->
-            <ul class="nav nav-tabs mb-4" id="authTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab">Вхід</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab">Реєстрація</button>
-                </li>
-            </ul>
+<div class="auth-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card auth-card">
 
-            <div class="tab-content" id="authTabsContent">
-                <!-- Форма Вхід -->
-                <div class="tab-pane fade show active" id="login" role="tabpanel">
-                    <form th:action="@{/login}" method="post">
-                        <div class="mb-3">
-                            <label for="loginEmail" class="form-label small fw-bold">Email</label>
-                            <input type="email" id="loginEmail" name="username" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="loginPassword" class="form-label small fw-bold">Пароль</label>
-                            <input type="password" id="loginPassword" name="password" class="form-control" required>
-                        </div>
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" id="rememberMe" name="remember-me">
-                            <label class="form-check-label small" for="rememberMe">Запам'ятати мене</label>
-                        </div>
-                        <button type="submit" class="btn btn-custom w-100">Увійти</button>
-                    </form>
-                </div>
+                    <div class="auth-header">
+                        <h4>Вітаємо в Lost & Found</h4>
 
-                <!-- Форма Реєстрація -->
-                <div class="tab-pane fade" id="register" role="tabpanel">
-                    <form th:action="@{/register}" method="post">
-                        <div class="mb-3">
-                            <label for="regEmail" class="form-label small fw-bold">Email</label>
-                            <input type="email" id="regEmail" name="email" class="form-control" required>
+                        <div th:if="${param.registered}" class="alert alert-success small py-2 mb-3"><i class="fas fa-check-circle me-2"></i>Реєстрація успішна!</div>
+                        <div th:if="${param.error}" class="alert alert-danger small py-2 mb-3"><i class="fas fa-exclamation-circle me-2"></i>Помилка входу або реєстрації.</div>
+
+                        <ul class="nav nav-tabs nav-fill border-0" id="authTab" role="tablist">
+                            <li class="nav-item">
+                                <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button">Вхід</button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button">Реєстрація</button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="card-body p-4 p-md-5">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="login">
+                                <form th:action="@{/login}" method="post">
+                                    <div class="mb-4">
+                                        <label class="form-label small fw-bold text-muted">Email</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                            <input type="email" name="username" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label small fw-bold text-muted">Пароль</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                            <input type="password" name="password" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-custom w-100">Увійти</button>
+                                </form>
+                            </div>
+
+                            <div class="tab-pane fade" id="register">
+                                <form th:action="@{/register}" method="post">
+                                    <div class="mb-3">
+                                        <label class="form-label small fw-bold text-muted">Email</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                            <input type="email" name="email" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label small fw-bold text-muted">Пароль</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                            <input type="password" name="password" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label small fw-bold text-muted">Підтвердження</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-check"></i></span>
+                                            <input type="password" name="confirmPassword" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-custom w-100">Створити акаунт</button>
+                                </form>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="regPassword" class="form-label small fw-bold">Пароль</label>
-                            <input type="password" id="regPassword" name="password" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="regConfirm" class="form-label small fw-bold">Підтвердження пароля</label>
-                            <input type="password" id="regConfirm" name="confirmPassword" class="form-control" required>
-                        </div>
-                        <button type="submit" class="btn btn-success w-100">Зареєструватися</button>
-                    </form>
+                    </div>
                 </div>
+                <p class="text-center mt-4 text-muted small">© 2026 Lost & Found. Всі права захищено.</p>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Bootstrap JS для вкладок -->
-<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

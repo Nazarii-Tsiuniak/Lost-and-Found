@@ -10,8 +10,9 @@
         .btn-custom { background-color: var(--main-green); color: white; border: none; }
         .btn-custom:hover { background-color: var(--dark-green); color: white; }
         .card-img-left { width: 100px; height: 100px; object-fit: cover; border-radius: 5px; }
-        .nav-link { color: rgba(255,255,255,0.8) !important; }
-        .nav-link.active { color: white !important; font-weight: bold; }
+
+        .navbar-nav .nav-link { color: rgba(255,255,255,0.8) !important; }
+        .navbar-nav .nav-link.active { color: white !important; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -35,7 +36,7 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
 
-            <!-- ЛІВА ЧАСТИНА -->
+            <!-- Left part -->
             <div class="navbar-nav me-auto">
                 <a class="nav-link" href="/">Головна</a>
 
@@ -52,17 +53,17 @@
                 </a>
             </div>
 
-            <!-- ПРАВА ЧАСТИНА -->
+            <!-- Right part -->
             <div class="navbar-nav align-items-center gap-2">
 
-                <!-- НЕ АВТОРИЗОВАНИЙ -->
+                <!-- not authorized -->
                 <a class="btn btn-outline-light btn-sm"
                    href="/login"
                    sec:authorize="!isAuthenticated()">
                     Увійти
                 </a>
 
-                <!-- АВТОРИЗОВАНИЙ -->
+                <!-- authorized -->
                 <form th:action="@{/logout}"
                       method="post"
                       sec:authorize="isAuthenticated()">
