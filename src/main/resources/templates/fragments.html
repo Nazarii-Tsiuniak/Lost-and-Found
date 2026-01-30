@@ -56,14 +56,12 @@
             <!-- Right part -->
             <div class="navbar-nav align-items-center gap-2">
 
-                <!-- not authorized -->
                 <a class="btn btn-outline-light btn-sm"
                    href="/login"
                    sec:authorize="!isAuthenticated()">
                     Увійти
                 </a>
 
-                <!-- authorized -->
                 <form th:action="@{/logout}"
                       method="post"
                       sec:authorize="isAuthenticated()">
@@ -72,14 +70,36 @@
                     </button>
                 </form>
 
-                <a href="/report/found"
-                   class="btn btn-light btn-sm px-3">
-                    + Подати оголошення
-                </a>
+                <div class="dropdown">
+                    <button class="btn btn-light btn-sm px-3 dropdown-toggle"
+                            type="button"
+                            id="reportDropdown"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                        + Подати оголошення
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="reportDropdown">
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-2" href="/report/found">
+                                <span>🔍</span> Я знайшов річ
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center gap-2" href="/report/lost">
+                                <span>📢</span> Я загубив річ
+                            </a>
+                        </li>
+                    </ul>
+                </div>
 
             </div>
         </div>
     </div>
 </nav>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+<th:block th:fragment="footer-scripts">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</th:block>
 </html>
