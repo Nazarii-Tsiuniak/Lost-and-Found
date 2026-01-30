@@ -33,8 +33,9 @@ public class Item {
     @Column(nullable = false)
     private String personName;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String type;
+    private ItemType type;
 
     private String imageUrl;
 
@@ -45,35 +46,26 @@ public class Item {
     public Item() {}
 
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
     public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-
     public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-
     public Category getCategory() { return category; }
-    public void setCategory(Category category) { this.category = category; }
-
     public String getLocation() { return location; }
-    public void setLocation(String location) { this.location = location; }
-
     public LocalDate getDate() { return date; }
-    public void setDate(LocalDate date) { this.date = date; }
-
     public String getContactPhone() { return contactPhone; }
-    public void setContactPhone(String contactPhone) { this.contactPhone = contactPhone; }
-
     public String getPersonName() { return personName; }
-    public void setPersonName(String personName) { this.personName = personName; }
-
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
-
+    public ItemType getType() { return type; }
     public String getImageUrl() { return imageUrl; }
-    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
-
     public User getUser() { return user; }
+
+    public void setId(Long id) { this.id = id; }
+    public void setTitle(String title) { this.title = title; }
+    public void setDescription(String description) { this.description = description; }
+    public void setCategory(Category category) { this.category = category; }
+    public void setLocation(String location) { this.location = location; }
+    public void setDate(LocalDate date) { this.date = date; }
+    public void setContactPhone(String contactPhone) { this.contactPhone = contactPhone; }
+    public void setPersonName(String personName) { this.personName = personName; }
+    public void setType(ItemType type) { this.type = type; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
     public void setUser(User user) { this.user = user; }
 }

@@ -2,12 +2,16 @@ package com.pnuDev.LostAndFound.controller;
 
 import com.pnuDev.LostAndFound.model.Category;
 import com.pnuDev.LostAndFound.model.Item;
+import com.pnuDev.LostAndFound.model.ItemType;
+import com.pnuDev.LostAndFound.model.User;
 import com.pnuDev.LostAndFound.repository.ItemRepository;
+import com.pnuDev.LostAndFound.repository.UserRepository;
+
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.security.core.Authentication;
+
 import java.time.LocalDate;
 
 @Controller
@@ -15,56 +19,70 @@ import java.time.LocalDate;
 public class ItemController {
 
     private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
 
-    public ItemController(ItemRepository itemRepository) {
+    public ItemController(ItemRepository itemRepository,
+                          UserRepository userRepository) {
         this.itemRepository = itemRepository;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/lost")
-    public String saveLostItem(@RequestParam String title,
-                               @RequestParam String ownerName,
-                               @RequestParam String category,
-                               @RequestParam String location,
-                               @RequestParam String date,
-                               @RequestParam String phone,
-                               @RequestParam String description,
-                               @RequestParam(required = false) MultipartFile image) {
+    public String saveLostItem(
+            @RequestParam String title,
+            @RequestParam String ownerName,
+            @RequestParam String category,
+            @RequestParam String location,
+            @RequestParam String date,
+            @RequestParam String phone,
+            @RequestParam String description,
+            Authentication authentication
+    ) {
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow();
 
         Item item = new Item();
         item.setTitle(title);
         item.setPersonName(ownerName);
-        item.setCategory(Category.valueOf(category));
+        item.setCategory(Category.valueOf(category.toUpperCase()));
         item.setLocation(location);
         item.setDate(LocalDate.parse(date));
         item.setContactPhone(phone);
         item.setDescription(description);
-        item.setType("LOST");
+        item.setType(ItemType.LOST); // ✅ використання enum
+        item.setUser(user);
 
         itemRepository.save(item);
-        return "redirect:/?success";
+        return "redirect:/my-items";
     }
 
     @PostMapping("/found")
-    public String saveFoundItem(@RequestParam String title,
-                                @RequestParam String finderName,
-                                @RequestParam String category,
-                                @RequestParam String location,
-                                @RequestParam String date,
-                                @RequestParam String phone,
-                                @RequestParam String description,
-                                @RequestParam MultipartFile image) {
+    public String saveFoundItem(
+            @RequestParam String title,
+            @RequestParam String finderName,
+            @RequestParam String category,
+            @RequestParam String location,
+            @RequestParam String date,
+            @RequestParam String phone,
+            @RequestParam String description,
+            @RequestParam(required = false) MultipartFile image,
+            Authentication authentication
+    ) {
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow();
 
         Item item = new Item();
         item.setTitle(title);
         item.setPersonName(finderName);
-        item.setCategory(Category.valueOf(category));
+        item.setCategory(Category.valueOf(category.toUpperCase()));
         item.setLocation(location);
         item.setDate(LocalDate.parse(date));
         item.setContactPhone(phone);
         item.setDescription(description);
-        item.setType("FOUND");
+        item.setType(ItemType.FOUND); // ✅ enum
+        item.setUser(user);
 
         itemRepository.save(item);
-        return "redirect:/?success";
+        return "redirect:/my-items";
     }
 }

@@ -1,7 +1,6 @@
 package com.pnuDev.LostAndFound.model;
 
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +18,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Item> items = new ArrayList<>();
+
     public User() {}
 
     public User(String email, String password) {
@@ -29,12 +31,9 @@ public class User {
     public Long getId() { return id; }
     public String getEmail() { return email; }
     public String getPassword() { return password; }
+    public List<Item> getItems() { return items; }
 
     public void setId(Long id) { this.id = id; }
     public void setEmail(String email) { this.email = email; }
     public void setPassword(String password) { this.password = password; }
-
-    // Додайте в модель User.java
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Item> items = new ArrayList<>();
 }
