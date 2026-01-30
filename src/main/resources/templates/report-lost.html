@@ -9,35 +9,46 @@
     <div class="card shadow-sm p-4">
         <h3 class="text-center mb-4">Я загубив річ</h3>
 
-        <form>
+        <form th:action="@{/report/lost}" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label class="form-label fw-bold small">Ваше імʼя</label>
+                <input type="text" name="ownerName" class="form-control" placeholder="Як до вас звертатися" required>
+            </div>
+
             <div class="mb-3">
                 <label class="form-label fw-bold small">Назва речі</label>
-                <input type="text" class="form-control" placeholder="Рюкзак, телефон...">
+                <input type="text" name="title" class="form-control" placeholder="Рюкзак, телефон..." required>
             </div>
+
+            <div th:replace="~{fragments :: category-select(name='category')}"></div>
 
             <div class="mb-3">
                 <label class="form-label fw-bold small">Де загубили</label>
-                <input type="text" class="form-control" placeholder="Місто, район">
+                <input type="text" name="location" class="form-control" placeholder="Місто, район" required>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label fw-bold small">Дата</label>
-                <input type="date" class="form-control">
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label fw-bold small">Контактний телефон</label>
-                <input type="tel" class="form-control">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold small">Дата</label>
+                    <input type="date" name="date" class="form-control" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold small">Контактний телефон</label>
+                    <input type="tel" name="phone" class="form-control" placeholder="+380..." required>
+                </div>
             </div>
 
             <div class="mb-3">
                 <label class="form-label fw-bold small">Опис</label>
-                <textarea class="form-control" rows="4"></textarea>
+                <textarea name="description" class="form-control" rows="3" placeholder="Опишіть особливі прикмети..."></textarea>
             </div>
 
-            <button class="btn btn-custom w-100 py-2">
-                Опублікувати
-            </button>
+            <div class="mb-3">
+                <label class="form-label fw-bold small">Додати фото (якщо є)</label>
+                <input type="file" name="image" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-custom w-100 py-2">Опублікувати</button>
         </form>
     </div>
 </div>
