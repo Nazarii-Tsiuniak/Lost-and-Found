@@ -1,21 +1,36 @@
 package com.pnuDev.LostAndFound;
 
+import com.pnuDev.LostAndFound.model.Item;
+import com.pnuDev.LostAndFound.repository.ItemRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import java.util.List;
 
 @Controller
 public class WebController {
 
-    // Головна сторінка
+    private final ItemRepository itemRepository;
+
+    public WebController(ItemRepository itemRepository) {
+        this.itemRepository = itemRepository;
+    }
+
+    // ЗАЛИШТЕ ТІЛЬКИ ЦЕЙ МЕТОД ДЛЯ "/"
     @GetMapping("/")
-    public String index() {
+    public String index(Model model) {
+        List<Item> items = itemRepository.findAll();
+        model.addAttribute("items", items);
         return "index";
     }
 
-    // Деталі речі
+    // Оновлений метод для деталей
     @GetMapping("/item/{id}")
-    public String itemDetail(@PathVariable Long id) {
+    public String itemDetail(@PathVariable Long id, Model model) {
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid item Id:" + id));
+        model.addAttribute("item", item);
         return "item-detail";
     }
 
