@@ -9,6 +9,45 @@
         <span class="text-muted" th:text="'Показано: ' + ${items.size()}">Показано: 0</span>
     </div>
 
+    <ul class="nav nav-pills mb-3">
+        <li class="nav-item">
+            <a class="nav-link"
+               th:classappend="${selectedType == null || selectedType == ''} ? 'active bg-success' : 'text-success'"
+               th:href="@{/(category=${selectedCategory})}">
+                Всі
+            </a>
+        </li>
+        <li class="nav-item ms-2">
+            <a class="nav-link"
+               th:classappend="${selectedType == 'LOST'} ? 'active bg-success' : 'text-success'"
+               href="/?type=LOST">
+                Загублені
+            </a>
+        </li>
+        <li class="nav-item ms-2">
+            <a class="nav-link"
+               th:classappend="${selectedType == 'FOUND'} ? 'active bg-success' : 'text-success'"
+               href="/?type=FOUND">
+                Знайдені
+            </a>
+        </li>
+    </ul>
+    <div class="mb-4 d-flex flex-wrap gap-2">
+        <a th:href="@{/(type=${selectedType})}"
+           class="btn btn-sm rounded-pill"
+           th:classappend="${selectedCategory == null || selectedCategory == ''} ? 'btn-dark' : 'btn-outline-dark'">
+            Всі категорії
+        </a>
+
+        <a th:each="cat : ${categories}"
+           th:href="@{/(type=${selectedType}, category=${cat.name()})}"
+           class="btn btn-sm rounded-pill"
+           th:classappend="${selectedCategory == cat.name()} ? 'btn-dark' : 'btn-outline-dark'"
+           th:text="${cat.displayName}">
+            Категорія
+        </a>
+    </div>
+
     <div class="list-group shadow-sm">
         <div th:each="item : ${items}" class="list-group-item d-flex align-items-center justify-content-between p-3 border-start-0 border-end-0">
             <div class="d-flex align-items-center">
@@ -20,7 +59,15 @@
                         <span th:text="${item.location}">Місто</span> |
                         <span th:text="${#temporals.format(item.date, 'dd MMMM, yyyy')}">Дата</span>
                     </p>
-                    <span class="badge bg-info text-dark" th:text="${item.type == 'LOST' ? 'Загублено' : 'Знайдено'}">Тип</span>
+
+                    <span class="badge"
+                          th:classappend="${item.type.name() == 'LOST' ? 'bg-danger' : 'bg-success'}"
+                          th:text="${item.type.name() == 'LOST' ? 'Загублено' : 'Знайдено'}">Тип
+                    </span>
+
+                    <span class="badge bg-secondary me-1"
+                          th:text="${item.category.displayName}"> Категорія
+                    </span>
                 </div>
             </div>
             <a th:href="@{/item/{id}(id=${item.id})}" class="btn btn-custom px-4">Переглянути</a>

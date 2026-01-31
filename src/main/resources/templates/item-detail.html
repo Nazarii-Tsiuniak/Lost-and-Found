@@ -3,26 +3,64 @@
 <head th:replace="~{fragments :: header-css}"></head>
 <body>
 <div th:replace="~{fragments :: navbar}"></div>
+
 <div class="container">
     <div class="row bg-white p-4 shadow-sm rounded">
-        <div class="col-md-5">
-            <img src="https://via.placeholder.com/400" class="img-fluid rounded shadow-sm" alt="item">
+        <div class="col-md-5 mb-3 mb-md-0">
+            <img th:src="${item.imageUrl != null && !item.imageUrl.isEmpty() ? item.imageUrl : 'https://via.placeholder.com/400?text=No+Image'}"
+                 class="img-fluid rounded shadow-sm w-100"
+                 style="object-fit: cover; max-height: 400px;"
+                 alt="Фото речі">
         </div>
+
         <div class="col-md-7">
-            <h2 class="mb-3">Чорний рюкзак</h2>
-            <div class="mb-4">
-                <p class="mb-1"><strong>📍 Олег Іваненко</strong></p>
-                <p class="text-muted mb-1 small">Київ, біля м. Палац Спорту</p>
-                <p class="text-primary">📞 +380 67 123 4567</p>
+            <h2 class="mb-2" th:text="${item.title}">Назва речі</h2>
+
+            <div class="mb-3">
+                <span class="badge me-1"
+                      th:classappend="${item.type.name() == 'LOST' ? 'bg-danger' : 'bg-success'}"
+                      th:text="${item.type.name() == 'LOST' ? 'Загублено' : 'Знайдено'}">
+                    Статус
+                </span>
+                <span class="badge bg-secondary" th:text="${item.category.displayName}">Категорія</span>
             </div>
-            <p class="text-secondary">Чорний рюкзак марки Nike. Всередині документи та навушники.</p>
+
+            <div class="mb-4 p-3 bg-light rounded border">
+                <p class="mb-2">
+                    <strong>👤 Контактна особа:</strong>
+                    <span th:text="${item.personName}">Ім'я</span>
+                </p>
+
+                <p class="mb-2 text-muted">
+                    📍 Місто: <span th:text="${item.location}"></span> |
+                    📅 Дата: <span th:text="${#temporals.format(item.date, 'dd MMMM, yyyy')}"></span>
+                </p>
+
+                <p class="mb-0 text-primary fs-5">
+                    📞 <a th:href="'tel:' + ${item.contactPhone}"
+                         class="text-decoration-none fw-bold"
+                         th:text="${item.contactPhone}">Телефон</a>
+                </p>
+            </div>
+
+            <h5 class="text-secondary">Опис</h5>
+            <p class="text-dark" th:text="${item.description}">Опис речі...</p>
+
             <hr>
+
             <div class="d-flex gap-2">
-                <button class="btn btn-custom flex-grow-1">✈️ Я загубив цю річ</button>
-                <button class="btn btn-outline-secondary px-4">Зв'язатися</button>
+                <a th:href="'tel:' + ${item.contactPhone}" class="btn btn-custom flex-grow-1">
+                    📞 Зателефонувати
+                </a>
+
+                <a href="/" class="btn btn-outline-secondary px-4">
+                    На головну
+                </a>
             </div>
         </div>
     </div>
 </div>
+
+<div th:replace="~{fragments :: footer-scripts}"></div>
 </body>
 </html>

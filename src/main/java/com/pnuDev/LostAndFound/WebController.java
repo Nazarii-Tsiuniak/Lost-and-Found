@@ -1,5 +1,6 @@
 package com.pnuDev.LostAndFound;
 
+import com.pnuDev.LostAndFound.model.Category;
 import com.pnuDev.LostAndFound.model.Item;
 import com.pnuDev.LostAndFound.model.User;
 import com.pnuDev.LostAndFound.repository.ItemRepository;
@@ -13,11 +14,14 @@ import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
+import com.pnuDev.LostAndFound.model.ItemType;
+import org.springframework.web.bind.annotation.RequestParam;
+
 @Controller
 public class WebController {
 
     private final ItemRepository itemRepository;
-    private final UserRepository userRepository; // ✅ додано
+    private final UserRepository userRepository;
 
     public WebController(ItemRepository itemRepository, UserRepository userRepository) {
         this.itemRepository = itemRepository;
@@ -25,9 +29,38 @@ public class WebController {
     }
 
     @GetMapping("/")
-    public String index(Model model) {
-        List<Item> items = itemRepository.findAll();
+    public String index(
+            @RequestParam(name = "type", required = false) String type,
+            @RequestParam(name = "category", required = false) String category,
+            Model model
+    ) {
+        List<Item> items;
+
+        ItemType typeEnum = null;
+        Category categoryEnum = null;
+
+        if (type != null && !type.isEmpty()) {
+            try { typeEnum = ItemType.valueOf(type.toUpperCase()); } catch (Exception e) {}
+        }
+        if (category != null && !category.isEmpty()) {
+            try { categoryEnum = Category.valueOf(category.toUpperCase()); } catch (Exception e) {}
+        }
+
+        if (typeEnum != null && categoryEnum != null) {
+            items = itemRepository.findByTypeAndCategory(typeEnum, categoryEnum);
+        } else if (typeEnum != null) {
+            items = itemRepository.findByType(typeEnum);
+        } else if (categoryEnum != null) {
+            items = itemRepository.findByCategory(categoryEnum);
+        } else {
+            items = itemRepository.findAll();
+        }
+
         model.addAttribute("items", items);
+        model.addAttribute("selectedType", type);
+        model.addAttribute("selectedCategory", category);
+        model.addAttribute("categories", Category.values());
+
         return "index";
     }
 
