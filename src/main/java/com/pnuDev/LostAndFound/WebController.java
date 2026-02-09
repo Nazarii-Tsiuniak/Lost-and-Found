@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import java.util.List;
 
 import com.pnuDev.LostAndFound.model.ItemType;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -120,6 +121,22 @@ public class WebController {
         return "my-items";
     }
 
+
+    @PostMapping("/item/{id}/delete")
+    public String deleteItem(@PathVariable Long id, Authentication authentication) {
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow();
+
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid item Id:" + id));
+
+        if (item.getUser().getId().equals(user.getId())) {
+            itemRepository.delete(item);
+        }
+
+        return "redirect:/my-items";
+    }
+
     @GetMapping("/report/found")
     public String reportFound() {
         return "report-found";
@@ -128,5 +145,20 @@ public class WebController {
     @GetMapping("/report/lost")
     public String reportLost() {
         return "report-lost";
+    }
+
+    @GetMapping("/item/{id}/edit")
+    public String editItemPage(@PathVariable Long id, Model model, Authentication authentication) {
+        User user = userRepository.findByEmail(authentication.getName()).orElseThrow();
+        Item item = itemRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid item Id:" + id));
+
+        if (!item.getUser().getId().equals(user.getId())) {
+            return "redirect:/my-items";
+        }
+
+        model.addAttribute("item", item);
+        model.addAttribute("categories", Category.values());
+        return "edit-item";
     }
 }

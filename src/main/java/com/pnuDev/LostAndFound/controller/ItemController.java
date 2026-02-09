@@ -85,4 +85,38 @@ public class ItemController {
         itemRepository.save(item);
         return "redirect:/my-items";
     }
+
+    @PostMapping("/update")
+    public String updateItem(
+            @RequestParam Long id,
+            @RequestParam String title,
+            @RequestParam String personName,
+            @RequestParam String category,
+            @RequestParam String location,
+            @RequestParam String date,
+            @RequestParam String phone,
+            @RequestParam String description,
+            @RequestParam(required = false) MultipartFile image,
+            Authentication authentication
+    ) {
+        User user = userRepository.findByEmail(authentication.getName()).orElseThrow();
+        Item item = itemRepository.findById(id).orElseThrow();
+
+        if (!item.getUser().getId().equals(user.getId())) {
+            return "redirect:/my-items";
+        }
+
+        item.setTitle(title);
+        item.setPersonName(personName);
+        item.setCategory(Category.valueOf(category));
+        item.setLocation(location);
+        item.setDate(LocalDate.parse(date));
+        item.setContactPhone(phone);
+        item.setDescription(description);
+
+        //Later here should be added logic of working with image
+
+        itemRepository.save(item);
+        return "redirect:/my-items";
+    }
 }

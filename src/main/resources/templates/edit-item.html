@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: header-css}"></head>
+<body>
+
+<div th:replace="~{fragments :: navbar}"></div>
+
+<div class="container" style="max-width:600px;">
+    <div class="card shadow-sm p-4">
+        <h3 class="text-center mb-4">Редагування оголошення</h3>
+
+        <form th:action="@{/report/update}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id" th:value="${item.id}">
+
+            <div class="mb-3">
+                <label class="form-label fw-bold small">Ваше імʼя (контактна особа)</label>
+                <input type="text" name="personName" class="form-control" th:value="${item.personName}" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold small">Назва речі</label>
+                <input type="text" name="title" class="form-control" th:value="${item.title}" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold small">Категорія</label>
+                <select name="category" class="form-select" required>
+                    <option th:each="cat : ${categories}"
+                            th:value="${cat.name()}"
+                            th:text="${cat.displayName}"
+                            th:selected="${cat == item.category}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold small">Місце</label>
+                <input type="text" name="location" class="form-control" th:value="${item.location}" required>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold small">Дата</label>
+                    <input type="date" name="date" class="form-control" th:value="${item.date}" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold small">Контактний телефон</label>
+                    <input type="tel" name="phone" class="form-control" th:value="${item.contactPhone}" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold small">Опис</label>
+                <textarea name="description" class="form-control" rows="3" th:text="${item.description}"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold small">Змінити фото (необов'язково)</label>
+                <input type="file" name="image" class="form-control">
+                <div th:if="${item.imageUrl}" class="mt-2">
+                    <small class="text-muted">Поточне фото:</small><br>
+                    <img th:src="${item.imageUrl}" style="height: 80px; border-radius: 5px;">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-custom w-100 py-2">Зберегти зміни</button>
+            <a href="/my-items" class="btn btn-link w-100 mt-2 text-secondary">Скасувати</a>
+        </form>
+    </div>
+</div>
+
+<div th:replace="~{fragments :: footer-scripts}"></div>
+</body>
+</html>

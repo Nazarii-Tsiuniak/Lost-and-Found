@@ -34,10 +34,7 @@ public class SecurityConfig {
                                 "/",
                                 "/login",
                                 "/item/**",
-                                "/report/**",
                                 "/register",
-                                "/my-items",
-                                "/profile",
                                 "/css/**",
                                 "/js/**",
                                 "/images/**")
