@@ -8,25 +8,80 @@
 <div class="container">
     <h3 class="mb-4">Мої оголошення</h3>
 
-    <ul class="nav nav-tabs mb-3">
+    <ul class="nav nav-pills mb-3">
         <li class="nav-item">
-            <a class="nav-link active" href="#">Загублені</a>
+            <a class="nav-link"
+               th:classappend="${selectedType == null || selectedType == ''} ? 'active bg-success' : 'text-success'"
+               th:href="@{/my-items(category=${selectedCategory})}">
+                Всі
+            </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">Знайдені</a>
+        <li class="nav-item ms-2">
+            <a class="nav-link"
+               th:classappend="${selectedType == 'LOST'} ? 'active bg-success' : 'text-success'"
+               th:href="@{/my-items(type='LOST', category=${selectedCategory})}">
+                Загублені
+            </a>
+        </li>
+        <li class="nav-item ms-2">
+            <a class="nav-link"
+               th:classappend="${selectedType == 'FOUND'} ? 'active bg-success' : 'text-success'"
+               th:href="@{/my-items(type='FOUND', category=${selectedCategory})}">
+                Знайдені
+            </a>
         </li>
     </ul>
 
+    <div class="mb-4 d-flex flex-wrap gap-2">
+        <a th:href="@{/my-items(type=${selectedType})}"
+           class="btn btn-sm rounded-pill"
+           th:classappend="${selectedCategory == null || selectedCategory == ''} ? 'btn-dark' : 'btn-outline-dark'">
+            Всі категорії
+        </a>
+
+        <a th:each="cat : ${categories}"
+           th:href="@{/my-items(type=${selectedType}, category=${cat.name()})}"
+           class="btn btn-sm rounded-pill"
+           th:classappend="${selectedCategory == cat.name()} ? 'btn-dark' : 'btn-outline-dark'"
+           th:text="${cat.displayName}">
+            Категорія
+        </a>
+    </div>
+
     <div class="list-group shadow-sm">
-        <div class="list-group-item d-flex justify-content-between align-items-center">
-            <div>
-                <h6 class="mb-1">Чорний рюкзак</h6>
-                <small class="text-muted">Київ · 20.03.2020</small>
+        <div th:each="item : ${items}" class="list-group-item d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <img th:src="${item.imageUrl != null && !item.imageUrl.isEmpty() ? item.imageUrl : 'https://via.placeholder.com/100'}"
+                     class="rounded me-3"
+                     style="width: 60px; height: 60px; object-fit: cover;"
+                     alt="item">
+
+                <div>
+                    <h5 class="mb-1">
+                        <a th:href="@{/item/{id}(id=${item.id})}" class="text-decoration-none text-dark" th:text="${item.title}">Назва</a>
+                    </h5>
+                    <small class="text-muted">
+                        <span th:text="${item.location}">Місто</span> ·
+                        <span th:text="${#temporals.format(item.date, 'dd.MM.yyyy')}">Дата</span>
+                    </small>
+                    <div class="mt-1">
+                         <span class="badge"
+                               th:classappend="${item.type.name() == 'LOST' ? 'bg-danger' : 'bg-success'}"
+                               th:text="${item.type.name() == 'LOST' ? 'Загублено' : 'Знайдено'}">Тип
+                         </span>
+                        <span class="badge bg-secondary" th:text="${item.category.displayName}">Категорія</span>
+                    </div>
+                </div>
             </div>
+
             <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-outline-secondary">Редагувати</button>
-                <button class="btn btn-sm btn-outline-danger">Видалити</button>
+                <a href="#" class="btn btn-sm btn-outline-secondary">Редагувати</a>
+                <a href="#" class="btn btn-sm btn-outline-danger">Видалити</a>
             </div>
+        </div>
+
+        <div th:if="${items.isEmpty()}" class="p-4 text-center text-muted">
+            У вас поки немає оголошень у цій категорії.
         </div>
     </div>
 </div>

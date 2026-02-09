@@ -83,9 +83,40 @@ public class WebController {
     }
 
     @GetMapping("/my-items")
-    public String myItems(Model model, Authentication authentication) {
+    public String myItems(
+            @RequestParam(name = "type", required = false) String type,
+            @RequestParam(name = "category", required = false) String category,
+            Model model,
+            Authentication authentication
+    ) {
         User user = userRepository.findByEmail(authentication.getName()).orElseThrow();
-        model.addAttribute("items", itemRepository.findByUser(user));
+        List<Item> items;
+
+        ItemType typeEnum = null;
+        Category categoryEnum = null;
+
+        if (type != null && !type.isEmpty()) {
+            try { typeEnum = ItemType.valueOf(type.toUpperCase()); } catch (Exception e) {}
+        }
+        if (category != null && !category.isEmpty()) {
+            try { categoryEnum = Category.valueOf(category.toUpperCase()); } catch (Exception e) {}
+        }
+
+        if (typeEnum != null && categoryEnum != null) {
+            items = itemRepository.findByUserAndTypeAndCategory(user, typeEnum, categoryEnum);
+        } else if (typeEnum != null) {
+            items = itemRepository.findByUserAndType(user, typeEnum);
+        } else if (categoryEnum != null) {
+            items = itemRepository.findByUserAndCategory(user, categoryEnum);
+        } else {
+            items = itemRepository.findByUser(user);
+        }
+
+        model.addAttribute("items", items);
+        model.addAttribute("selectedType", type);
+        model.addAttribute("selectedCategory", category);
+        model.addAttribute("categories", Category.values());
+
         return "my-items";
     }
 

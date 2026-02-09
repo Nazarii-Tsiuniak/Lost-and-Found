@@ -12,4 +12,8 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findByCategory(Category category);
     List<Item> findByTypeAndCategory(ItemType type, Category category);
     List<Item> findByUser(User user);
+
+    List<Item> findByUserAndType(User user, ItemType type);
+    List<Item> findByUserAndCategory(User user, Category category);
+    List<Item> findByUserAndTypeAndCategory(User user, ItemType type, Category category);
 }
