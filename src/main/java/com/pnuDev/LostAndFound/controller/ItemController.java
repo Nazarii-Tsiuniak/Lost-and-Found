@@ -6,6 +6,7 @@ import com.pnuDev.LostAndFound.model.ItemType;
 import com.pnuDev.LostAndFound.model.User;
 import com.pnuDev.LostAndFound.repository.ItemRepository;
 import com.pnuDev.LostAndFound.repository.UserRepository;
+import com.pnuDev.LostAndFound.service.ImageService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +21,14 @@ public class ItemController {
 
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
+    private final ImageService imageService;
 
     public ItemController(ItemRepository itemRepository,
-                          UserRepository userRepository) {
+                          UserRepository userRepository,
+                          ImageService imageService) {
         this.itemRepository = itemRepository;
         this.userRepository = userRepository;
+        this.imageService = imageService;
     }
 
     @PostMapping("/lost")
@@ -36,10 +40,10 @@ public class ItemController {
             @RequestParam String date,
             @RequestParam String phone,
             @RequestParam String description,
+            @RequestParam(required = false) MultipartFile image,
             Authentication authentication
     ) {
-        User user = userRepository.findByEmail(authentication.getName())
-                .orElseThrow();
+        User user = userRepository.findByEmail(authentication.getName()).orElseThrow();
 
         Item item = new Item();
         item.setTitle(title);
@@ -49,8 +53,13 @@ public class ItemController {
         item.setDate(LocalDate.parse(date));
         item.setContactPhone(phone);
         item.setDescription(description);
-        item.setType(ItemType.LOST); // ✅ використання enum
+        item.setType(ItemType.LOST);
         item.setUser(user);
+
+        if (image != null && !image.isEmpty()) {
+            String imageUrl = imageService.saveImage(image);
+            item.setImageUrl(imageUrl);
+        }
 
         itemRepository.save(item);
         return "redirect:/my-items";
@@ -68,8 +77,7 @@ public class ItemController {
             @RequestParam(required = false) MultipartFile image,
             Authentication authentication
     ) {
-        User user = userRepository.findByEmail(authentication.getName())
-                .orElseThrow();
+        User user = userRepository.findByEmail(authentication.getName()).orElseThrow();
 
         Item item = new Item();
         item.setTitle(title);
@@ -79,8 +87,13 @@ public class ItemController {
         item.setDate(LocalDate.parse(date));
         item.setContactPhone(phone);
         item.setDescription(description);
-        item.setType(ItemType.FOUND); // ✅ enum
+        item.setType(ItemType.FOUND);
         item.setUser(user);
+
+        if (image != null && !image.isEmpty()) {
+            String imageUrl = imageService.saveImage(image);
+            item.setImageUrl(imageUrl);
+        }
 
         itemRepository.save(item);
         return "redirect:/my-items";
@@ -114,7 +127,10 @@ public class ItemController {
         item.setContactPhone(phone);
         item.setDescription(description);
 
-        //Later here should be added logic of working with image
+        if (image != null && !image.isEmpty()) {
+            String imageUrl = imageService.saveImage(image);
+            item.setImageUrl(imageUrl);
+        }
 
         itemRepository.save(item);
         return "redirect:/my-items";

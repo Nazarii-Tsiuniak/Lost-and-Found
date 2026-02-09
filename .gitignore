@@ -35,3 +35,6 @@ build/
 ### H2 DataBase ###
 *.mv.db
 *.trace.db
+
+### Image folder ###
+uploads/*
