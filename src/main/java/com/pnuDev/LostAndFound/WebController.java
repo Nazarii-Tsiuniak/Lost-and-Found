@@ -79,7 +79,17 @@ public class WebController {
     }
 
     @GetMapping("/profile")
-    public String profile() {
+    public String profile(Model model, Authentication authentication) {
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow();
+
+        List<Item> lostItems = itemRepository.findByUserAndType(user, ItemType.LOST);
+        List<Item> foundItems = itemRepository.findByUserAndType(user, ItemType.FOUND);
+
+        model.addAttribute("user", user);
+        model.addAttribute("lostItems", lostItems);
+        model.addAttribute("foundItems", foundItems);
+
         return "profile";
     }
 

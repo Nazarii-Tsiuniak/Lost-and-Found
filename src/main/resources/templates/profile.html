@@ -3,28 +3,71 @@
 <head th:replace="~{fragments :: header-css}"></head>
 <body>
 <div th:replace="~{fragments :: navbar}"></div>
+
 <div class="container">
     <div class="text-center mb-5">
         <div class="bg-light d-inline-block p-4 rounded-circle mb-3 border">👤</div>
         <h3>Мій профіль</h3>
-        <p class="text-muted">📧 petrenko@gmail.com | 📞 +380 67 123 4567</p>
+        <p class="text-muted">
+            📧 <span th:text="${user.email}">user@example.com</span>
+        </p>
+        <div class="d-flex justify-content-center gap-2">
+            <a href="/my-items" class="btn btn-outline-primary btn-sm">Керувати оголошеннями</a>
+            <form th:action="@{/logout}" method="post" class="d-inline">
+                <button class="btn btn-outline-danger btn-sm">Вийти</button>
+            </form>
+        </div>
     </div>
 
     <div class="row">
         <div class="col-md-6 mb-4">
-            <h5 class="border-bottom pb-2">Мої загублені речі</h5>
+            <h5 class="border-bottom pb-2 d-flex justify-content-between align-items-center">
+                Мої загублені речі
+                <span class="badge bg-secondary rounded-pill" th:text="${lostItems.size()}">0</span>
+            </h5>
+
             <div class="row g-2 mt-2">
-                <div class="col-4"><img src="https://via.placeholder.com/150" class="img-fluid rounded shadow-sm"></div>
-                <div class="col-4"><img src="https://via.placeholder.com/150" class="img-fluid rounded shadow-sm"></div>
+                <div th:each="item : ${lostItems}" class="col-4">
+                    <a th:href="@{/item/{id}(id=${item.id})}">
+                        <img th:src="${item.imageUrl != null && !item.imageUrl.isEmpty() ? item.imageUrl : 'https://via.placeholder.com/150?text=No+Image'}"
+                             class="img-fluid rounded shadow-sm border"
+                             style="width: 100%; height: 100px; object-fit: cover;"
+                             alt="Фото речі">
+                    </a>
+                    <p class="small text-center text-truncate mt-1" th:text="${item.title}">Назва</p>
+                </div>
+
+                <div th:if="${lostItems.isEmpty()}" class="col-12 text-muted small fst-italic">
+                    Список порожній.
+                </div>
             </div>
         </div>
+
         <div class="col-md-6 mb-4">
-            <h5 class="border-bottom pb-2">Мої знайдені речі</h5>
+            <h5 class="border-bottom pb-2 d-flex justify-content-between align-items-center">
+                Мої знайдені речі
+                <span class="badge bg-secondary rounded-pill" th:text="${foundItems.size()}">0</span>
+            </h5>
+
             <div class="row g-2 mt-2">
-                <div class="col-4"><img src="https://via.placeholder.com/150" class="img-fluid rounded shadow-sm"></div>
+                <div th:each="item : ${foundItems}" class="col-4">
+                    <a th:href="@{/item/{id}(id=${item.id})}">
+                        <img th:src="${item.imageUrl != null && !item.imageUrl.isEmpty() ? item.imageUrl : 'https://via.placeholder.com/150?text=No+Image'}"
+                             class="img-fluid rounded shadow-sm border"
+                             style="width: 100%; height: 100px; object-fit: cover;"
+                             alt="Фото речі">
+                    </a>
+                    <p class="small text-center text-truncate mt-1" th:text="${item.title}">Назва</p>
+                </div>
+
+                <div th:if="${foundItems.isEmpty()}" class="col-12 text-muted small fst-italic">
+                    Список порожній.
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<div th:replace="~{fragments :: footer-scripts}"></div>
 </body>
 </html>
