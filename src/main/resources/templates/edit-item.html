@@ -22,16 +22,13 @@
                 <input type="text" name="title" class="form-control" th:value="${item.title}" required>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label fw-bold small">Категорія</label>
-                <select name="category" class="form-select" required>
-                    <option th:each="cat : ${categories}"
-                            th:value="${cat.name()}"
-                            th:text="${cat.displayName}"
-                            th:selected="${cat == item.category}">
-                    </option>
-                </select>
-            </div>
+            <select name="category" class="form-select" required>
+                <option th:each="cat : ${categories}"
+                        th:value="${cat.name()}"
+                        th:text="${cat.displayName}"
+                        th:selected="${cat == item.category}">
+                </option>
+            </select>
 
             <div class="mb-3">
                 <label class="form-label fw-bold small">Місце</label>

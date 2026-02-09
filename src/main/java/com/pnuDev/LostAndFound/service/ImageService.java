@@ -45,4 +45,19 @@ public class ImageService {
             throw new RuntimeException("Failed to store file", e);
         }
     }
+
+    public void deleteImage(String imageUrl) {
+        if (imageUrl == null || imageUrl.isEmpty()) {
+            return;
+        }
+
+        try {
+            String filename = imageUrl.replace("/uploads/", "");
+            Path filePath = rootLocation.resolve(filename);
+
+            Files.deleteIfExists(filePath);
+        } catch (IOException e) {
+            System.err.println("Could not delete file: " + imageUrl + ". Error: " + e.getMessage());
+        }
+    }
 }

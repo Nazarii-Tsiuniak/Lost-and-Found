@@ -18,15 +18,19 @@ import com.pnuDev.LostAndFound.model.ItemType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.pnuDev.LostAndFound.service.ImageService;
+
 @Controller
 public class WebController {
 
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
+    private final ImageService imageService;
 
-    public WebController(ItemRepository itemRepository, UserRepository userRepository) {
+    public WebController(ItemRepository itemRepository, UserRepository userRepository, ImageService imageService) {
         this.itemRepository = itemRepository;
         this.userRepository = userRepository;
+        this.imageService = imageService;
     }
 
     @GetMapping("/")
@@ -141,7 +145,13 @@ public class WebController {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid item Id:" + id));
 
         if (item.getUser().getId().equals(user.getId())) {
+            String imageUrl = item.getImageUrl();
+
             itemRepository.delete(item);
+
+            if (imageUrl != null) {
+                imageService.deleteImage(imageUrl);
+            }
         }
 
         return "redirect:/my-items";

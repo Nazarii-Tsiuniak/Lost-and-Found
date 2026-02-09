@@ -119,17 +119,23 @@ public class ItemController {
             return "redirect:/my-items";
         }
 
+        String oldImageUrl = item.getImageUrl();
+
         item.setTitle(title);
         item.setPersonName(personName);
-        item.setCategory(Category.valueOf(category));
+        item.setCategory(Category.valueOf(category.toUpperCase()));
         item.setLocation(location);
         item.setDate(LocalDate.parse(date));
         item.setContactPhone(phone);
         item.setDescription(description);
 
         if (image != null && !image.isEmpty()) {
-            String imageUrl = imageService.saveImage(image);
-            item.setImageUrl(imageUrl);
+            String newImageUrl = imageService.saveImage(image);
+            item.setImageUrl(newImageUrl);
+
+            if (oldImageUrl != null) {
+                imageService.deleteImage(oldImageUrl);
+            }
         }
 
         itemRepository.save(item);
