@@ -12,10 +12,18 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.pnuDev.LostAndFound.repository.UserRepository;
-
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import javax.sql.DataSource;
 
 @Configuration
 public class SecurityConfig {
+
+    private final DataSource dataSource;
+
+    public SecurityConfig(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -23,6 +31,15 @@ public class SecurityConfig {
         // For encryption, replace it with BCryptPasswordEncoder.
         // return new BCryptPasswordEncoder();
         return NoOpPasswordEncoder.getInstance();
+    }
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+        tokenRepository.setDataSource(dataSource);
+        // Uncomment next line for first run in table wasn`t created before
+        // tokenRepository.setCreateTableOnStartup(true);
+        return tokenRepository;
     }
 
     @Bean
@@ -46,6 +63,12 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .defaultSuccessUrl("/", true)
                         .permitAll()
+                )
+                .rememberMe(remember -> remember
+                        .tokenRepository(persistentTokenRepository())
+                        .key("uniqueAndSecretKeyForLostAndFound")
+                        .tokenValiditySeconds(60 * 60 * 24 * 30) // 30 days
+                        .rememberMeParameter("remember-me")
                 )
                 .logout(logout -> logout.logoutSuccessUrl("/"));
 
